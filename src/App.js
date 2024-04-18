@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios"
+import { useState, useEffect } from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+
+  const url = "https://randomuser.me/api"
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    tambahData()
+  }, [])
+
+  const tambahData = () => {
+    axios.get(url).then(function (response) {
+      console.log(response.data.results)
+      setUsers(users.concat(response.data.results))
+    })
+  }
+
+  const tampilkan = (
+    <>
+    <button onClick={tambahData}>Tambah data</button>
+    <br/>
+    <br/>
+    {
+      users.map(function(u) {
+        return (
+          <>
+          <img src={u.picture.medium} alt={u.name.first} />
+          <h1>{u.name.first} {u.name.last}</h1>
+          <h1>{u.email}</h1>
+          <hr />
+          <br/>
+          </>
+        )
+      })
+    }
+    </>
+  )
+  return tampilkan
 }
 
-export default App;
+export default App
